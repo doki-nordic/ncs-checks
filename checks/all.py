@@ -2,14 +2,15 @@
 import time
 import traceback
 from pathlib import Path
-from common import write_output, output_path, repo
+from common import send_notification, output_path, repo
 
 def _main():
     for check_script in Path(__file__).parent.glob('check_*.py'):
         try:
             __import__(check_script.stem, globals(), locals(), [], 0)
         except BaseException:
-            write_output(f'The `{check_script}` script failed:\n\n```\n{traceback.format_exc()}\n```', 'errors')
+            send_notification('script-error.md', script_path=check_script.name, trace=traceback.format_exc())
+    exit()
     comments = []
     for file in output_path.glob('**/*.md'):
         comments.append(file.read_text())

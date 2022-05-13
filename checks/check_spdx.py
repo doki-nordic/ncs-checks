@@ -1,5 +1,5 @@
 
-from common import get_data_dir, write_output, github
+from common import get_data_dir, send_notification, github
 
 my_tag_file = get_data_dir('spdx') / 'latest.txt'
 
@@ -9,15 +9,6 @@ try:
 except:
     old_tag = ''
 
-comment_text = f'''
-Newer version `{new_tag}` of SPDX license list detected.
-
-Update `west ncs-sbom` tool:
-* [ ] Run: `python nrf/scripts/west_commands/sbom/helpers/update_spdx_licenses.py`
-* [ ] Commit and push changes of the `nrf/scripts/west_commands/sbom/data/spdx-licenses.yaml` file
-* [ ] Create a PR
-'''
-
 if new_tag != old_tag:
-    write_output(comment_text, 'spdx')
+    send_notification('spdx-license-list.md', version=new_tag)
     my_tag_file.write_text(new_tag)
