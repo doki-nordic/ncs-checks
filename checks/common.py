@@ -1,10 +1,10 @@
 
 import os
+import subprocess
 import tempfile
-import yaml
 from pathlib import Path
 from github import Github
-from jinja2 import Template, filters
+from jinja2 import Template
 
 
 def send_notification(template, **data):
@@ -31,6 +31,16 @@ class DataDir:
     def write_file(self, file_name, content):
         file = self.path / file_name
         file.write_text(content)
+
+    def changed(self):
+        cp = subprocess.run(['git', 'status',  '--porcelain', '.'], cwd=self.path, capture_output=True)
+        if len(cp.stderr):
+            print(cp.stderr)
+            raise Exception('Command shows an error message!')
+        if cp.returncode != 0:
+            raise Exception(f'Command returned exit status {cp.returncode}!')
+        return len(cp.stdout.strip()) != 0
+
 
 github = Github(os.environ['GITHUB_TOKEN'])
 print(f'Github API connected. Remaining requests {github.rate_limiting[0]} of {github.rate_limiting[1]}.')
