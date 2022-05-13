@@ -32,6 +32,9 @@ jobs:
           echo "GITHUB_ACTOR=${{ github.actor }}" >> $GITHUB_ENV
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "GITHUB_REPO=${{ github.repository }}" >> $GITHUB_ENV
+      - name: Dependencies
+        run: |
+          pip install --user -r requirements.txt
       - name: Run checks
         run: |
           python checks/all.py
