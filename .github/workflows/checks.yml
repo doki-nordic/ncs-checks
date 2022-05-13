@@ -1,0 +1,29 @@
+name: Checks
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v3
+      - name: Checkout persistent data
+        uses: actions/checkout@v3
+        with:
+          ref: data
+          fetch-depth: 0
+          path: data
+      - name: Run checks
+        run: python src/entry.py
+      - name: Commit persistent data
+        run: |
+          git config --global credential.helper ""
+          git config --global --add credential.helper store
+          echo "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com" >> ~/.git-credentials
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"
+          cd data
+          git add -A
+          git commit -m "Persistent data update" || true
+          git push || true
