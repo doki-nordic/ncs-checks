@@ -29,7 +29,7 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             -i -u $GITHUB_ACTOR:$GITHUB_TOKEN \
             https://api.github.com/repos/$GITHUB_REPO/issues \
-            -d '{"title":"Found a bug","body":"I'm having a problem with this.","assignees":["octocat"],"milestone":1,"labels":["bug"]}'
+            -d '{"title":"Found a bug","body":"I am having a problem with this.","assignees":["octocat"],"milestone":1,"labels":["bug"]}'
       - name: Commit persistent data
         run: |
           cd data
