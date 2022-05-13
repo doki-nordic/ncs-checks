@@ -10,7 +10,6 @@ def _main():
             __import__(check_script.stem, globals(), locals(), [], 0)
         except BaseException:
             send_notification('script-error.md', script_path=check_script.name, trace=traceback.format_exc())
-    exit()
     comments = []
     for file in output_path.glob('**/*.md'):
         comments.append(file.read_text())
