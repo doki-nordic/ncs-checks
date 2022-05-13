@@ -1,6 +1,8 @@
 name: Checks
 on:
   workflow_dispatch:
+  schedule:
+    - cron:  '39 2 * * 1-5'
 permissions:
   actions: write
   checks: write
