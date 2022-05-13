@@ -18,7 +18,7 @@ jobs:
         run: python src/entry.py
       - name: Test
         run: |
-          curl -i -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://api.github.com/user
+          curl -i -u ${{ github.actor }}:${{ secrets.GITHUB_TOKEN }} https://api.github.com/repos/${{ github.repository }}/issues
       - name: Commit persistent data
         run: |
           cd data
