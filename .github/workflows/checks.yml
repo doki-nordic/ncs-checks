@@ -34,12 +34,7 @@ jobs:
           echo "GITHUB_REPO=${{ github.repository }}" >> $GITHUB_ENV
       - name: Run checks
         run: |
-          python src/entry.py
-      - name: Test
-        run: |
-          curl -i -u $GITHUB_ACTOR:$GITHUB_TOKEN \
-            -X POST https://api.github.com/repos/$GITHUB_REPO/issues \
-            -d '{"title":"Found a bug","body":"I am having a problem with this."}'
+          python checks/all.py
       - name: Commit persistent data
         run: |
           cd data
