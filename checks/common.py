@@ -32,6 +32,16 @@ class DataDir:
         file = self.path / file_name
         file.write_text(content)
 
+    def replace_file(self, file_name, content):
+        file = self.path / file_name
+        if file.exists():
+            old = file.read_text()
+            result = old != content
+        else:
+            result = True
+        file.write_text(content)
+        return result
+
     def changed(self):
         cp = subprocess.run(['git', 'status',  '--porcelain', '.'], cwd=self.path, capture_output=True)
         if len(cp.stderr):
