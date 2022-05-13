@@ -16,10 +16,21 @@ def send_notification(template, **data):
     with open(tempfile.mkstemp(suffix='.md', prefix='', dir=output_path, text=True)[0], mode='w') as f:
         f.write(output)
 
-def get_data_dir(subdir):
-    my_data_dir = data_path / subdir
-    my_data_dir.mkdir(parents=True, exist_ok=True)
-    return my_data_dir
+class DataDir:
+
+    def __init__(self, subdir='common'):
+        self.path = data_path / subdir
+        self.path.mkdir(parents=True, exist_ok=True)
+
+    def read_file(self, file_name, default_content=None):
+        file = self.path / file_name
+        if not file.exists() and default_content is not None:
+            file.write_text(default_content)
+        return file.read_text()
+
+    def write_file(self, file_name, content):
+        file = self.path / file_name
+        file.write_text(content)
 
 github = Github(os.environ['GITHUB_TOKEN'])
 print(f'Github API connected. Remaining requests {github.rate_limiting[0]} of {github.rate_limiting[1]}.')
