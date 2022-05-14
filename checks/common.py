@@ -1,7 +1,6 @@
 
 import os
 import subprocess
-import tempfile
 from pathlib import Path
 from github import Github
 from jinja2 import Template
@@ -13,8 +12,7 @@ def send_notification(template, **data):
     print('============================= BEGIN NOTIFICATION =============================')
     print(output)
     print('============================== END NOTIFICATION ==============================')
-    with open(tempfile.mkstemp(suffix='.md', prefix='', dir=output_path, text=True)[0], mode='w') as f:
-        f.write(output)
+    notifications.append(output)
 
 class DataDir:
 
@@ -51,14 +49,20 @@ class DataDir:
             raise Exception(f'Command returned exit status {cp.returncode}!')
         return len(cp.stdout.strip()) != 0
 
-
 github = Github(os.environ['GITHUB_TOKEN'])
 print(f'Github API connected. Remaining requests {github.rate_limiting[0]} of {github.rate_limiting[1]}.')
 github_actor = os.environ['GITHUB_ACTOR']
 repo = github.get_repo(os.environ['GITHUB_REPO'], lazy=True)
 data_path = (Path(__file__).parent.parent / 'data').resolve()
-output_path = (Path(__file__).parent.parent / 'output').resolve()
 templates_path = (Path(__file__).parent.parent / 'templates').resolve()
+notifications = []
 
-data_path.mkdir(exist_ok=True)
-output_path.mkdir(exist_ok=True)
+if not data_path.exists():
+    print('The "data" directory does not exist.')
+    print('Clone the "data" branch to a "data" directory.')
+    raise FileNotFoundError('Missing data directory.')
+
+if DataDir('.').changed():
+    print('The "data" directory has uncommitted changes.')
+    print('During development, you have to reset or commit changes in the "data" directory.')
+    raise Exception('Data directory not clean.')
