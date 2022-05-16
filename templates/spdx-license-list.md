@@ -1,4 +1,4 @@
-@doki-nordic
+@doki-nordic @maje-emb
 
 ---
 
