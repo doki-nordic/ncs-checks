@@ -18,7 +18,7 @@ The check can save some information between each run, e.g.
 to avoid reporting the same thing each day.
 Files contained in the `data` directory will be preserved.
 They will be committed into `data` branch by github's workflow.
-If you running the script locally, you have to take care of committing `data` directory manually.
+If you running the script locally, you have to take care of committing (or reverting) `data` directory manually.
 
 ## How to run it locally
 
