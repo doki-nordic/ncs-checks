@@ -1,3 +1,5 @@
+{# This notification will be send if the SPDX license list version is updated (a new release of the github repository containing the list data). #}
+
 @doki-nordic @maje-emb
 
 ---
