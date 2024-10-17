@@ -36,7 +36,7 @@ jobs:
           echo "GITHUB_REPO=${{ github.repository }}" >> $GITHUB_ENV
       - name: Dependencies
         run: |
-          pip install --break-system-packages --user -r requirements.txt
+          pip install --break-system-packages --user -r requirements.txt || pip install --user -r requirements.txt
       - name: Run checks
         run: |
           python checks/all.py
